@@ -1,4 +1,4 @@
-    package io.bottel.models;
+package io.bottel.models;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -182,7 +182,7 @@ public class User {
     }
 
     public String getVoxAddress() {
-        return getVoxUsername() + "@staging-bottel.voximplant.com";
+        return getVoxUsername() + "@staging-bottel.appengine.voximplant.com";
     }
 
     public String getVoxPassword() {

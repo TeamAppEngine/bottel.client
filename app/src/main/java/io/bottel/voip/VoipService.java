@@ -36,7 +36,7 @@ public abstract class VOIPService {
 
     public abstract void hold();
 
-    public abstract void answerCall();
+    public abstract void acceptCall();
 
     public abstract void rejectCall();
 

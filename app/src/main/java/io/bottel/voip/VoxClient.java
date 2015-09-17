@@ -13,6 +13,7 @@ import java.util.Map;
 import de.greenrobot.event.EventBus;
 import io.bottel.models.events.OnCallStatusChanged;
 import io.bottel.models.events.OnConnectionStateChanged;
+import io.bottel.models.events.OnLoginSuccessful;
 import io.bottel.services.CallReceiverService;
 import io.bottel.utils.GUtils;
 import io.bottel.utils.PresencePersistent;
@@ -85,7 +86,7 @@ public class VoxClient extends VOIPService implements VoxImplantCallback {
 
     @Override
     public void connect(Context context) {
-//        Toast.makeText(context, "connecting..", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "connecting..", Toast.LENGTH_SHORT).show();
 
         if (!isConnected)
             client.connect();
@@ -108,14 +109,14 @@ public class VoxClient extends VOIPService implements VoxImplantCallback {
     }
 
     @Override
-    public void answerCall() {
+    public void acceptCall() {
         client.answerCall(currentCallId);
     }
 
     @Override
     public void rejectCall() {
         client.declineCall(currentCallId);
-//        PresencePersistent.setCurrentState(context, PresencePersistent.State.AVAILABLE);
+        PresencePersistent.setCurrentState(context, PresencePersistent.State.AVAILABLE);
     }
 
     @Override
@@ -169,8 +170,6 @@ public class VoxClient extends VOIPService implements VoxImplantCallback {
         toast("call connected");
         isOnCall = true;
 
-        hold();
-
         PresencePersistent.setCurrentState(context, PresencePersistent.State.ON_CALL);
         EventBus.getDefault().post(new OnCallStatusChanged(OnCallStatusChanged.CALL_STATUS.CONNECTED));
     }
@@ -214,14 +213,14 @@ public class VoxClient extends VOIPService implements VoxImplantCallback {
     @Override
     public void onLoginSuccessful(String displayName) {
         toast("Login succeeded.");
-//        EventBus.getDefault().post(new OnLoginSuccessful());
+        EventBus.getDefault().post(new OnLoginSuccessful());
 //        this.listener.onLoggedIn(displayName);
     }
 
     @Override
     public void onIncomingCall(String callId, String from, String displayName, boolean videoCall, Map<String, String> headers) {
 //        EventBus.getDefault().post(new OnCallStatusChanged(OnCallStatusChanged.CALL_STATUS.INCOMING_CALL));
-//        client.answerCall(callId);
+//        client.acceptCall(callId);
 
         toast("call received in voxclient " + from);
         currentCallId = callId;

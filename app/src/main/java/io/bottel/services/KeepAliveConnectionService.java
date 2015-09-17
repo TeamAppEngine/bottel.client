@@ -7,6 +7,8 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
+import io.bottel.models.User;
+import io.bottel.utils.AuthManager;
 import io.bottel.utils.CallServiceManager;
 import io.bottel.voip.VOIPService;
 import io.bottel.voip.VoxClient;
@@ -38,6 +40,11 @@ public class KeepAliveConnectionService extends Service {
             CallServiceManager.setCallService(callService);
         }
 
+        User user = AuthManager.getUser(getApplicationContext());
+        if (user == null)
+            return;
+
+        this.callService.loginAsync(getApplicationContext(), user.getVoxAddress(), user.getVoxPassword());
         Toast.makeText(getApplicationContext(), "call service started.", Toast.LENGTH_SHORT).show();
     }
 
@@ -53,9 +60,12 @@ public class KeepAliveConnectionService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        User user = AuthManager.getUser(getApplicationContext());
+        if (user != null) {
+            this.callService.loginAsync(getApplicationContext(), user.getVoxAddress(), user.getVoxPassword());
+        }
 
-        this.callService.loginAsync(this, "neo@staging-bottel.appengine.voximplant.com", "1234567");
-        return START_STICKY;
+        return START_REDELIVER_INTENT;
     }
 
     @Override
