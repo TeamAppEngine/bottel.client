@@ -4,8 +4,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="@dimen/activity_horizontal_margin"
-    tools:context="io.teatalk.androidclient.Activities.DashboardActivity">
+    android:padding="@dimen/activity_horizontal_margin">
 
 
     <LinearLayout
