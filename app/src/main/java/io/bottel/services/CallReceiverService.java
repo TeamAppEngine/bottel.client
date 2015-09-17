@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
-import io.bottel.MainActivity;
+import io.bottel.views.MainActivity;
 
 /**
  * Created by Omid on 9/17/2015.
