@@ -1,33 +1,35 @@
 package io.bottel.views;
 
+import android.animation.ValueAnimator;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.MultiAutoCompleteTextView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.places.GeoDataApi;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.io.InputStream;
 import java.util.List;
 
 import io.bottel.R;
@@ -35,11 +37,19 @@ import io.bottel.R;
 public class MapsActivity extends FragmentActivity{
 
     private GoogleMap mMap;
-    //public static mapListener;
+    private String[] country_iso;
+    private String[] country_name;
+    private AutoCompleteTextView autoCompleteTextView;
+    private CardView cardView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_maps);
+
+        country_iso = getResources().getStringArray(R.array.country_iso);
+        country_name = getResources().getStringArray(R.array.country_name);
+
         //Get markers
         Intent intent = getIntent();
         try {
@@ -51,13 +61,15 @@ public class MapsActivity extends FragmentActivity{
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        setContentView(R.layout.activity_maps);
 
-        AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.auto_complete_text_view_activity_maps);
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line, new String[]{"Ali", "Emad", "Sadjad"});
-
+        setUpMapIfNeeded();
+        //CardView
+        cardView = (CardView) findViewById(R.id.card_view_activity_maps);
+        //AutoCompleteTextView set adapter and settings.
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(MapsActivity.this,
+                android.R.layout.simple_dropdown_item_1line, country_name);
+        autoCompleteTextView = (AutoCompleteTextView)
+                findViewById(R.id.auto_complete_text_view_activity_maps);
         autoCompleteTextView.setAdapter(adapter);
 
         autoCompleteTextView.addTextChangedListener(new TextWatcher() {
@@ -68,7 +80,7 @@ public class MapsActivity extends FragmentActivity{
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                //adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -77,7 +89,54 @@ public class MapsActivity extends FragmentActivity{
             }
         });
 
-        setUpMapIfNeeded();
+        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                InputMethodManager imanager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imanager.hideSoftInputFromWindow(autoCompleteTextView.getWindowToken(), 0);
+                getCountryMarkers(autoCompleteTextView.getText().toString());
+            }
+        });
+
+        ValueAnimator va = ValueAnimator.ofInt(150, 350);
+        va.setDuration(700);
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            public void onAnimationUpdate(ValueAnimator animation) {
+                Integer value = (Integer) animation.getAnimatedValue();
+                cardView.getLayoutParams().height = value.intValue();
+                cardView.requestLayout();
+            }
+        });
+        va.start();
+    }
+
+    private void getCountryMarkers(final String countryName){
+        final ProgressDialog progressDialog = new ProgressDialog(MapsActivity.this);
+        progressDialog.setTitle("ارتباط با سرور");
+        progressDialog.setMessage("دریافت افراد آنلاین کشور مورد نظر");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Geocoder geocoder = new Geocoder(getApplicationContext());
+                try {
+                    List<Address> addressList = geocoder.getFromLocationName(countryName,1);
+                    if(addressList.size()>0){
+                        final LatLng currentLocation = new LatLng(addressList.get(0).getLatitude(),addressList.get(0).getLongitude());
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                progressDialog.hide();
+                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 3));
+                            }
+                        });
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     @Override
@@ -135,8 +194,9 @@ public class MapsActivity extends FragmentActivity{
                                 @Override
                                 public void run() {
                                     if(addressList.size()>0){
-                                        Toast.makeText(getApplicationContext(), addressList.get(0).getCountryCode(),Toast.LENGTH_SHORT).show();
-                                        getCountryMarkers(addressList.get(0).getCountryCode());
+                                        //Toast.makeText(getApplicationContext(), addressList.get(0).getCountryCode(),Toast.LENGTH_SHORT).show();
+                                        getCountryMarkers(addressList.get(0).getCountryName());
+                                        autoCompleteTextView.setText(addressList.get(0).getCountryName());
                                     }
                                     else
                                         Toast.makeText(getApplicationContext(), "No Country!",Toast.LENGTH_SHORT).show();
@@ -150,15 +210,5 @@ public class MapsActivity extends FragmentActivity{
 
             }
         });
-    }
-
-    private void getCountryMarkers(String countryCode){
-        String countryMarkers = null;
-        //TODO: get country markers from server.
-
-    }
-
-    public interface MapListener{
-        String getCountryMarkers(String countryCode);
     }
 }
