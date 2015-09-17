@@ -13,7 +13,9 @@ import java.util.Map;
 import de.greenrobot.event.EventBus;
 import io.bottel.models.events.OnCallStatusChanged;
 import io.bottel.models.events.OnConnectionStateChanged;
+import io.bottel.services.CallReceiverService;
 import io.bottel.utils.GUtils;
+import io.bottel.utils.PresencePersistent;
 
 /**
  * Created by Omid on 9/17/2015.
@@ -121,11 +123,6 @@ public class VoxClient extends VOIPService implements VoxImplantCallback {
         client.setMute(false);
     }
 
-    @Override
-    public void changePresence() {
-
-    }
-
 
     /**
      * VoxImplantCallback listeners
@@ -215,7 +212,7 @@ public class VoxClient extends VOIPService implements VoxImplantCallback {
     @Override
     public void onLoginSuccessful(String displayName) {
         toast("Login succeeded.");
-        EventBus.getDefault().post(new OnLoginSuccessful());
+//        EventBus.getDefault().post(new OnLoginSuccessful());
 //        this.listener.onLoggedIn(displayName);
     }
 
@@ -226,7 +223,7 @@ public class VoxClient extends VOIPService implements VoxImplantCallback {
 
         toast("call received in voxclient " + from);
         currentCallId = callId;
-        EventBus.getDefault().post(new OnIncomingCallReceived(callId, from, displayName, videoCall, headers));
+//        EventBus.getDefault().post(new OnIncomingCallReceived(callId, from, displayName, videoCall, headers));
 
         Intent intent = new Intent(context, CallReceiverService.class);
         intent.putExtra(CallReceiverService.BUNDLE_CALLEE_EMAIL, displayName);
