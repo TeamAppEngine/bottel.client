@@ -14,7 +14,6 @@ import io.bottel.voip.VOIPService;
  */
 public class BottelApp extends Application {
 
-
     private static BottelApp instance;
 //    VOIPService callService;
 
