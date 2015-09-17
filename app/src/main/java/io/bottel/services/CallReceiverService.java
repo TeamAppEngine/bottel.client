@@ -26,10 +26,8 @@ public class CallReceiverService extends Service {
         Intent i = new Intent(this, MainActivity.class);
 
         if (intent != null && intent.getExtras() != null) {
-//            i.putExtra(MainActivity.BUNDLE_SOMEONE_IS_CALLING, true);
-//            i.putExtra(MainActivity.BUNDLE_CALLEE_EMAIL, intent.getExtras().getString(BUNDLE_CALLEE_EMAIL));
-//            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//            getApplication().startActivity(i);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getApplication().startActivity(i);
         }
 
         return START_NOT_STICKY;
