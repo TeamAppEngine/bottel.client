@@ -35,10 +35,8 @@ public class BottelApp extends Application {
 
         instance = this;
 
-
         // start presence report service
         PresenceAlarm.init(this);
-
     }
 
     public VOIPService getCallService() {

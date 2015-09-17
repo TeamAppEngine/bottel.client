@@ -155,6 +155,8 @@ public class VoxClient extends VOIPService implements VoxImplantCallback {
         this.isConnected = false;
         toast("connection lost!");
 
+        // auto-connect immediately
+        connect(this.context);
     }
 
     @Override

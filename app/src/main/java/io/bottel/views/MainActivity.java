@@ -1,22 +1,43 @@
 package io.bottel.views;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
+import io.bottel.BottelApp;
 import io.bottel.R;
-import io.bottel.services.KeepAliveConnectionService;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        startService(new Intent(this, KeepAliveConnectionService.class));
+        findControls();
+        configureControls();
+    }
+
+    private void configureControls() {
+        this.button.setOnClickListener(this);
+    }
+
+    private void findControls() {
+        button = (Button) findViewById(R.id.button_call_omid);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.button_call_omid:
+                BottelApp.getInstance().getCallService().call("o.najaee_gmail.com");
+                break;
+        }
     }
 
     @Override

@@ -38,12 +38,6 @@ public class KeepAliveConnectionService extends Service {
             CallServiceManager.setCallService(callService);
         }
 
-
-//        User user = AuthManager.getUser(getApplicationContext());
-//        if (user == null)
-//            return;
-
-        this.callService.loginAsync(getApplicationContext(), "omid", "123"); // user.getVoxAddress(), user.getVoxPassword());
         Toast.makeText(getApplicationContext(), "call service started.", Toast.LENGTH_SHORT).show();
     }
 
@@ -59,11 +53,8 @@ public class KeepAliveConnectionService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-//        User user = AuthManager.getUser(getApplicationContext());
-//        if (user != null) {
-//            this.callService.loginAsync(getApplicationContext(), user.getVoxAddress(), user.getVoxPassword());
-//        }
 
+        this.callService.loginAsync(this, "neo@staging-bottel.appengine.voximplant.com", "1234567");
         return START_STICKY;
     }
 
