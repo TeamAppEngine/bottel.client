@@ -1,14 +1,15 @@
-package io.bottel.views;
+package io.bottel.views.activities.maps;
 
 import android.animation.ValueAnimator;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.location.Address;
 import android.location.Geocoder;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -29,23 +31,27 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import io.bottel.R;
+import io.bottel.views.fragments.LoginFragment;
 
-public class MapsActivity extends FragmentActivity{
+public class MapsActivity extends FragmentActivity implements View.OnClickListener {
 
     private GoogleMap mMap;
     private String[] country_iso;
     private String[] country_name;
     private AutoCompleteTextView autoCompleteTextView;
     private CardView cardView;
+    Button registerButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        registerButton = (Button) findViewById(R.id.button_register);
+
+        registerButton.setOnClickListener(this);
 
         country_iso = getResources().getStringArray(R.array.country_iso);
         country_name = getResources().getStringArray(R.array.country_name);
@@ -55,7 +61,7 @@ public class MapsActivity extends FragmentActivity{
         try {
             String markersString = intent.getStringExtra("markers");
             JSONArray markersJSONArray = new JSONArray("[]");
-            for (int i=0; i<markersJSONArray.length(); i++) {
+            for (int i = 0; i < markersJSONArray.length(); i++) {
                 //TODO: Read markers data.
             }
         } catch (JSONException e) {
@@ -110,7 +116,7 @@ public class MapsActivity extends FragmentActivity{
         va.start();
     }
 
-    private void getCountryMarkers(final String countryName){
+    private void getCountryMarkers(final String countryName) {
         final ProgressDialog progressDialog = new ProgressDialog(MapsActivity.this);
         progressDialog.setTitle("ارتباط با سرور");
         progressDialog.setMessage("دریافت افراد آنلاین کشور مورد نظر");
@@ -121,9 +127,9 @@ public class MapsActivity extends FragmentActivity{
             public void run() {
                 Geocoder geocoder = new Geocoder(getApplicationContext());
                 try {
-                    List<Address> addressList = geocoder.getFromLocationName(countryName,1);
-                    if(addressList.size()>0){
-                        final LatLng currentLocation = new LatLng(addressList.get(0).getLatitude(),addressList.get(0).getLongitude());
+                    List<Address> addressList = geocoder.getFromLocationName(countryName, 1);
+                    if (addressList.size() > 0) {
+                        final LatLng currentLocation = new LatLng(addressList.get(0).getLatitude(), addressList.get(0).getLongitude());
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -189,17 +195,16 @@ public class MapsActivity extends FragmentActivity{
                     @Override
                     public void run() {
                         try {
-                            final List<Address> addressList = geocoder.getFromLocation(latLng.latitude,latLng.longitude,1);
+                            final List<Address> addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if(addressList.size()>0){
+                                    if (addressList.size() > 0) {
                                         //Toast.makeText(getApplicationContext(), addressList.get(0).getCountryCode(),Toast.LENGTH_SHORT).show();
                                         getCountryMarkers(addressList.get(0).getCountryName());
                                         autoCompleteTextView.setText(addressList.get(0).getCountryName());
-                                    }
-                                    else
-                                        Toast.makeText(getApplicationContext(), "No Country!",Toast.LENGTH_SHORT).show();
+                                    } else
+                                        Toast.makeText(getApplicationContext(), "No Country!", Toast.LENGTH_SHORT).show();
                                 }
                             });
                         } catch (IOException e) {
@@ -210,5 +215,18 @@ public class MapsActivity extends FragmentActivity{
 
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.button_register:
+                FragmentManager manager = getSupportFragmentManager();
+                Fragment fragment = Fragment.instantiate(MapsActivity.this, LoginFragment.class.getName());
+                manager.beginTransaction()
+                        .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out)
+                        .add(R.id.frame_wrapper, fragment).commit();
+                break;
+        }
     }
 }

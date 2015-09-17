@@ -1,4 +1,4 @@
-package io.bottel.views;
+package io.bottel.views.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
