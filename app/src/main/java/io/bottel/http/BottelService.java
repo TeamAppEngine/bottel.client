@@ -1,5 +1,7 @@
 package io.bottel.http;
 
+import retrofit.Callback;
+import retrofit.Response;
 import retrofit.Retrofit;
 
 /**

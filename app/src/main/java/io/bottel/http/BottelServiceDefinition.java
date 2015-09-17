@@ -8,6 +8,6 @@ import retrofit.http.GET;
  */
 public interface BottelServiceDefinition {
     @GET("id")
-    void id(Callback<String> message);
+    void id(String username, Callback<String> message);
 
 }
