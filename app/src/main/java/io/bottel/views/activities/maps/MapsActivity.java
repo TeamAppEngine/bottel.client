@@ -33,9 +33,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 import java.util.List;
 
+import de.greenrobot.event.EventBus;
 import io.bottel.R;
 import io.bottel.http.BottelService;
 import io.bottel.models.LocalPin;
+import io.bottel.models.events.OnLoginSuccessful;
+import io.bottel.utils.AuthManager;
+import io.bottel.views.fragments.LoginFragment;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -43,21 +47,22 @@ import retrofit.client.Response;
 public class MapsActivity extends FragmentActivity {
 
     private GoogleMap mMap;
-    private String[] country_iso;
-    private String[] country_name;
+    String[] country_iso;
+    String[] country_name;
     private AutoCompleteTextView autoCompleteTextView;
-    private CardView cardView;
+    CardView cardView;
     private List<LocalPin> localPins = null;
     private LinearLayout linearLayout;
 
-    private static int NUM_PAGES = 5;
-    private ViewPager mPager;
-    private PagerAdapter mPagerAdapter;
+    static int NUM_PAGES = 5;
+    ViewPager mPager;
+    PagerAdapter mPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager) findViewById(R.id.view_pager_activity_main);
         mPagerAdapter = new UserPagerAdapter(getSupportFragmentManager());
@@ -161,10 +166,18 @@ public class MapsActivity extends FragmentActivity {
         }).start();
     }
 
+    public void onEvent(OnLoginSuccessful loggedIn) {
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+            openSelectTopic();
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         setUpMapIfNeeded();
+        EventBus.getDefault().register(this);
     }
 
     /**
@@ -182,6 +195,7 @@ public class MapsActivity extends FragmentActivity {
      * stopped or paused), {@link #onCreate(Bundle)} may not be called again so we should call this
      * method in {@link #onResume()} to guarantee that it will be called.
      */
+
     private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
@@ -193,6 +207,12 @@ public class MapsActivity extends FragmentActivity {
                 setUpMap();
             }
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
     }
 
     /**
@@ -253,12 +273,37 @@ public class MapsActivity extends FragmentActivity {
         }
     }
 
+    ProgressDialog dialog = null;
     UserPageFragment.BottleSelectionInterface bottleSelectionInterface = new UserPageFragment.BottleSelectionInterface() {
         @Override
         public void onClick(int position) {
-            // TODO open
+            if (AuthManager.isLoggedIn(MapsActivity.this)) {
+                openSelectTopic();
+            } else {
+                CardView c = (CardView) findViewById(R.id.card_topic);
+                c.setVisibility(View.VISIBLE);
+                Fragment fragment = Fragment.instantiate(MapsActivity.this, LoginFragment.class.getName(), null);
+                ((LoginFragment) fragment).setSignUpInterface(new LoginFragment.SignUpInterface() {
+                    @Override
+                    public void Successfull() {
+                        dialog = new ProgressDialog(MapsActivity.this);
+                        dialog.setMessage("Connecting..");
+                        dialog.setCancelable(true);
+                        dialog.show();
+                    }
+                });
+
+                getSupportFragmentManager().beginTransaction().add(R.id.wrapper, fragment, null).commit();
+            }
         }
     };
+
+    private void openSelectTopic() {
+        CardView c = (CardView) findViewById(R.id.card_topic);
+        c.setVisibility(View.VISIBLE);
+        Fragment fragment = Fragment.instantiate(MapsActivity.this, TopicSelectionFragment.class.getName(), null);
+        getSupportFragmentManager().beginTransaction().add(R.id.wrapper, fragment).addToBackStack(null).commit();
+    }
 
     public int dpToPx(int dp) {
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();

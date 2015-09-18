@@ -15,6 +15,7 @@ import io.bottel.http.BottelService;
 import io.bottel.models.Result;
 import io.bottel.models.User;
 import io.bottel.utils.AuthManager;
+import io.bottel.utils.PreferenceUtil;
 import io.bottel.views.activities.call.CallActivity;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -24,7 +25,7 @@ import retrofit.client.Response;
  * Created by Omid on 9/18/2015.
  */
 public class TopicSelectionFragment extends Fragment {
-    private static final String PARTNER_ID = "k1_gmail.com";
+    private static final String PARTNER_ID = "a.yarveisi@gmail.com";
 
     Spinner spinner;
 
@@ -43,9 +44,11 @@ public class TopicSelectionFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 int selection = spinner.getSelectedItemPosition();
+                String[] topics = getResources().getStringArray(R.array.topics);
                 User user = AuthManager.getUser(getActivity());
+                PreferenceUtil.save(getActivity(), "topic", topics[selection]);
                 if (user != null)
-                    BottelService.getInstance().getCallInfo(PARTNER_ID, user.getUserID(), new Callback<Result>() {
+                    BottelService.getInstance().getCallInfo(user.getUserID(), PARTNER_ID, topics[selection], new Callback<Result>() {
                         @Override
                         public void success(Result result, Response response) {
                             makeACall();

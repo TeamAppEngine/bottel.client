@@ -7,8 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import io.bottel.R;
@@ -28,9 +28,20 @@ import retrofit.client.Response;
  */
 public class LoginFragment extends Fragment implements View.OnClickListener {
 
+    public interface SignUpInterface {
+        void Successfull();
+    }
+
+    SignUpInterface signUpInterface = null;
+
+    public void setSignUpInterface(SignUpInterface signUpInterface) {
+        this.signUpInterface = signUpInterface;
+    }
+
     EditText emailEditText;
     EditText passwordEditText;
-    Button registerButton;
+    TextView registerButton;
+    TextView loginButton;
 
     @Nullable
     @Override
@@ -54,7 +65,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private void findControls(View view) {
         emailEditText = (EditText) view.findViewById(R.id.editText_email);
         passwordEditText = (EditText) view.findViewById(R.id.editText_password);
-        registerButton = (Button) view.findViewById(R.id.button_register);
+        registerButton = (TextView) view.findViewById(R.id.button_register);
+        loginButton = (TextView) view.findViewById(R.id.button_login);
     }
 
     @Override
@@ -76,6 +88,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                             user.setEmail(email);
                             user.setUserID(authToken.getUserId());
                             AuthManager.login(getActivity(), user);
+
+
                             getActivity().startService(new Intent(getActivity(), KeepAliveConnectionService.class));
                             changeProfile();
                         }
@@ -87,21 +101,34 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     });
                 }
                 break;
+            case R.id.button_login:
+                User user = new User();
+                user.setEmail("a.yarveisi@gmail.com");
+                user.setUserID("f5505462-d079-4b7c-a888-509cf657d74g");
+                AuthManager.login(getActivity(), user);
+                getActivity().startService(new Intent(getActivity(), KeepAliveConnectionService.class));
+                changeProfile();
+                break;
         }
     }
 
     private void changeProfile() {
-        // replace with profile fragment
+//         replace with profile fragment
 //        Fragment fragment = Fragment.instantiate(getActivity(), ProfileFragment.class.getName());
 //        getFragmentManager().beginTransaction()
 //                .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-//                .replace(R.id.frame_wrapper, fragment)
+//                .replace(R.id.wrapper, fragment)
 //                .commit();
+        if (signUpInterface != null)
+            signUpInterface.Successfull();
 
         // remove this fragment
         getFragmentManager().beginTransaction()
                 .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
                 .remove(this)
                 .commit();
+
+
     }
+
 }

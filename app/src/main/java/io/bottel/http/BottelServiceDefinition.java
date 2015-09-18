@@ -32,6 +32,7 @@ public interface BottelServiceDefinition {
     @GET("/countries/{country_id}/users/online")
     void getOnlineUsersPerCountry(@Path("country_id") String countryId, Callback<List<LocalPin>> callback);
 
+    @FormUrlEncoded
     @POST("/users/{user_id}/users/{partner_id}/call")
-    void getCallInfo(@Path("user_id") String userId, @Path("partner_id") String partnerId, Callback<Result> callback);
+    void getCallInfo(@Path("user_id") String userId, @Path("partner_id") String partnerId, @Field("topic") String topic, Callback<Result> callback);
 }
