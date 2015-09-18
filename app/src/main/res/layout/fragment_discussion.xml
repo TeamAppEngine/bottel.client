@@ -49,7 +49,7 @@
                 android:layout_above="@id/text_view_name_activity_call"
                 android:layout_marginBottom="70dp"/>
             <TextView
-                android:id="@+id/text_view_time_activity_call"
+                android:id="@+id/textView_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
