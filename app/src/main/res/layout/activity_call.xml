@@ -5,29 +5,9 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <TextView
+    <FrameLayout
+        android:id="@+id/wrapper"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="THIS IS SOME TOPIC TO TALK ABOUT..." />
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/button_reject"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="REJECT" />
-
-        <Button
-            android:id="@+id/button_accept"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ACCEPT" />
-    </LinearLayout>
-
+        android:layout_height="match_parent" />
 
 </LinearLayout>

@@ -25,7 +25,7 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".views.activities.MainActivity" />
-        <activity android:name=".views.activities.CallActivity" />
+        <activity android:name=".views.activities.call.CallActivity" />
 
         <activity
             android:name=".views.activities.LoginActivity"
