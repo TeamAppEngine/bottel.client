@@ -1,10 +1,9 @@
-package io.bottel.views;
+package io.bottel.views.mapsActivity;
 
 import android.animation.ValueAnimator;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.v4.app.FragmentActivity;
@@ -29,7 +28,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import io.bottel.R;
