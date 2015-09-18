@@ -5,14 +5,73 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="DISCUSSION" />
+    <FrameLayout
+        android:id="@+id/wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/text_view_title_activity_call"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="20dp"
+                android:text="You are talking whit"
+                android:background="#22cd56"
+                android:textColor="#FFF"
+                android:textSize="20sp"/>
+            <TextView
+                android:id="@+id/text_view_name_activity_call"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Kevin from england"
+                android:gravity="center"
+                android:textSize="24sp"/>
+            <ImageView
+                android:id="@+id/image_view_circle_bg_activity_call"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:src="@drawable/user_icon_bg_ringing"
+                android:layout_centerHorizontal="true"
+                android:layout_above="@id/text_view_name_activity_call"
+                android:layout_marginBottom="-20dp"/>
+            <ImageView
+                android:id="@+id/image_view_user_activity_call"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:src="@drawable/user_icon_large"
+                android:layout_centerHorizontal="true"
+                android:layout_above="@id/text_view_name_activity_call"
+                android:layout_marginBottom="70dp"/>
+            <TextView
+                android:id="@+id/text_view_time_activity_call"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="00 : 12 : 37"
+                android:gravity="center"
+                android:textSize="36sp"
+                android:layout_below="@id/text_view_name_activity_call"
+                android:layout_marginTop="15dp"/>
+            <io.bottel.views.custom.FFTextView
+                android:id="@+id/button_hangup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:text="End call"
+                android:gravity="center"
+                android:padding="20dp"
+                android:layout_marginBottom="30dp"
+                android:background="@drawable/end_call_bg"
+                android:textSize="20sp"
+                android:textColor="#000"/>
+        </RelativeLayout>
 
-    <io.bottel.views.custom.FFButtonView
-        android:id="@+id/button_hangup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="hang up" />
+    </FrameLayout>
 </LinearLayout>

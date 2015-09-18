@@ -28,9 +28,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;
@@ -50,6 +52,7 @@ public class MapsActivity extends FragmentActivity {
     String[] country_iso;
     String[] country_name;
     private AutoCompleteTextView autoCompleteTextView;
+
     CardView cardView;
     private List<LocalPin> localPins = null;
     private LinearLayout linearLayout;
@@ -58,6 +61,9 @@ public class MapsActivity extends FragmentActivity {
     ViewPager mPager;
     PagerAdapter mPagerAdapter;
 
+    public static List<LocalPin> localPinArrayList = new ArrayList<>();
+    public List<Marker> markers = new ArrayList<>();
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +73,7 @@ public class MapsActivity extends FragmentActivity {
         mPager = (ViewPager) findViewById(R.id.view_pager_activity_main);
         mPagerAdapter = new UserPagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
+
 
         country_iso = getResources().getStringArray(R.array.country_iso);
         country_name = getResources().getStringArray(R.array.country_name);
@@ -128,9 +135,11 @@ public class MapsActivity extends FragmentActivity {
                         BottelService.getInstance().getOnlineUsersPerCountry(addressList.get(0).getCountryCode(), new Callback<List<LocalPin>>() {
                             @Override
                             public void success(List<LocalPin> localPins, Response response) {
-                                MapsActivity.this.localPins = localPins;
-                                for (LocalPin pin : localPins) {
-                                    /// TODO
+                                localPinArrayList = localPins;
+                                NUM_PAGES = localPins.size();
+                                mMap.clear();
+                                for(LocalPin localPin: localPins){
+                                    markers.add(mMap.addMarker(new MarkerOptions().position(new LatLng(localPin.getX(), localPin.getY()))));
                                 }
                             }
 
@@ -260,7 +269,6 @@ public class MapsActivity extends FragmentActivity {
         @Override
         public Fragment getItem(int position) {
             UserPageFragment userPageFragment = new UserPageFragment();
-            userPageFragment.setOnBottleClicked(bottleSelectionInterface);
             Bundle args = new Bundle();
             args.putInt("position", position);
             userPageFragment.setArguments(args);
