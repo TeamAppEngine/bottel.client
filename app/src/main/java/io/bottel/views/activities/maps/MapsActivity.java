@@ -65,6 +65,13 @@ public class MapsActivity extends FragmentActivity implements View.OnClickListen
 
         registerButton.setOnClickListener(this);
 
+        (findViewById(R.id.button_call)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BottelApp.getInstance().getCallService().call("nops_gmail.com");
+            }
+        });
+
         country_iso = getResources().getStringArray(R.array.country_iso);
         country_name = getResources().getStringArray(R.array.country_name);
 

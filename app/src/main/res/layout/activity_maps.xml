@@ -34,6 +34,13 @@
         android:layout_height="wrap_content"
         android:text="register" />
 
+    <Button
+        android:id="@+id/button_call"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_register"
+        android:text="call" />
+
     <FrameLayout
         android:id="@+id/frame_wrapper"
         android:layout_width="match_parent"
