@@ -63,7 +63,7 @@ public class MapsActivity extends FragmentActivity {
 
     public static List<LocalPin> localPinArrayList = new ArrayList<>();
     public List<Marker> markers = new ArrayList<>();
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

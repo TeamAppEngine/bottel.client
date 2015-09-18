@@ -5,28 +5,88 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
+    <FrameLayout
+        android:id="@+id/wrapper"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="THIS IS SOME TOPIC TO TALK ABOUT..." />
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/text_view_title_activity_call"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="20dp"
+                android:text="Incoming call"
+                android:background="#441266"
+                android:textColor="#FFF"
+                android:textSize="20sp"/>
+            <TextView
+                android:id="@+id/text_view_name_activity_call"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Language: English"
+                android:gravity="left"
+                android:textSize="18sp"
+                android:padding="20dp"/>
+            <ImageView
+                android:id="@+id/image_view_circle_bg_activity_call"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:src="@drawable/userIcon_bg_ringing"
+                android:layout_centerHorizontal="true"
+                android:layout_above="@id/text_view_name_activity_call"
+                android:layout_marginBottom="-20dp"/>
+            <ImageView
+                android:id="@+id/image_view_user_activity_call"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:src="@drawable/userIcon_large"
+                android:layout_centerHorizontal="true"
+                android:layout_above="@id/text_view_name_activity_call"
+                android:layout_marginBottom="70dp"/>
+            <TextView
+                android:id="@+id/text_view_time_activity_call"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Some body from some where wants to talk to you about"
+                android:gravity="left"
+                android:textSize="24sp"
+                android:layout_below="@id/text_view_name_activity_call"
+                android:layout_marginTop="15dp"
+                android:padding="20dp"/>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentBottom="true"
+                android:gravity="center"
+                android:layout_marginBottom="30dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+                <Button
+                    android:id="@+id/button_reject"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="REJECT"
+                    android:background="@drawable/end_call_bg"
+                    android:layout_margin="5dp"/>
 
-        <Button
-            android:id="@+id/button_reject"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="REJECT" />
+                <Button
+                    android:id="@+id/button_accept"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ACCEPT"
+                    android:background="@drawable/answer_call_bg"
+                    android:layout_margin="5dp"
+                    android:textColor="#FFF"/>
+            </LinearLayout>
+        </RelativeLayout>
 
-        <Button
-            android:id="@+id/button_accept"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ACCEPT" />
-    </LinearLayout>
-
+    </FrameLayout>
 </LinearLayout>
