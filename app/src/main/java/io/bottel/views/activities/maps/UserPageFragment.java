@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import io.bottel.R;
+import io.bottel.models.LocalPin;
 
 public class UserPageFragment extends Fragment {
     TextView send_a_bottel;
@@ -69,7 +70,7 @@ public class UserPageFragment extends Fragment {
         for(String language : currentPin.getLanguages()){
             language +=language + ", ";
         }
-        languages_text_view.setText("Languages: "+languages);
+        languages_text_view.setText("Languages: " + languages);
         return rootView;
     }
 }
