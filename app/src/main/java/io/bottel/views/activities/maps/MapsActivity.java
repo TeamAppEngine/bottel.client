@@ -46,6 +46,7 @@ import io.bottel.models.events.OnUserLoggedIn;
 import io.bottel.services.KeepAliveConnectionService;
 import io.bottel.services.PresenceService;
 import io.bottel.utils.AuthManager;
+import io.bottel.views.activities.call.CallActivity;
 import io.bottel.views.fragments.LoginFragment;
 
 public class MapsActivity extends FragmentActivity implements View.OnClickListener {
@@ -68,7 +69,10 @@ public class MapsActivity extends FragmentActivity implements View.OnClickListen
         (findViewById(R.id.button_call)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BottelApp.getInstance().getCallService().call("nops_gmail.com");
+                Intent intent = new Intent(MapsActivity.this, CallActivity.class);
+                intent.putExtra(CallActivity.BUNDLE_IS_CALLING, true);
+                intent.putExtra(CallActivity.BUNDLE_EMAIL, "k1_gmail.com");
+                startActivity(intent);
             }
         });
 

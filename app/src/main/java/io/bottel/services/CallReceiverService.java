@@ -26,9 +26,7 @@ public class CallReceiverService extends Service {
             // pass receipt email to the receiver activity
             i.putExtra(CallActivity.BUNDLE_EMAIL, intent.getExtras().getString(BUNDLE_CALLEE_EMAIL));
             i.putExtra(CallActivity.BUNDLE_HAS_INCOMING, true);
-
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
             getApplication().startActivity(i);
         }
 

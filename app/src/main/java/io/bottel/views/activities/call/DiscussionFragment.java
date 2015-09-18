@@ -31,9 +31,16 @@ public class DiscussionFragment extends Fragment {
         hangup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getActivity() != null)
+                if (getActivity() != null) {
                     BottelApp.getInstance().getCallService().hangUp(getActivity());
+                    goToSummary();
+                }
             }
         });
+    }
+
+    private void goToSummary() {
+        Fragment fragment = Fragment.instantiate(getActivity(), SummaryFragment.class.getName());
+        getFragmentManager().beginTransaction().replace(R.id.wrapper, fragment, null).commit();
     }
 }

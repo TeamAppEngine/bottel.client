@@ -12,30 +12,15 @@ import io.bottel.R;
 /**
  * Created by Omid on 9/18/2015.
  */
-public class SummaryFragment extends Fragment {
+public class CallingFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_summary, container, false);
+        return inflater.inflate(R.layout.fragment_calling, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        view.findViewById(R.id.button_close).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                closeMe();
-
-            }
-        });
-    }
-
-
-    private void closeMe() {
-//        getFragmentManager().beginTransaction().remove(this).commit();
-
-
     }
 }
