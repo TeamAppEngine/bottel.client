@@ -1,4 +1,4 @@
-package io.bottel.views.mapsActivity;
+package io.bottel.views.activities.maps;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;

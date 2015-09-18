@@ -43,9 +43,7 @@ public class AuthManager {
         // unregister from call service
         BottelApp.getInstance().getCallService().signOut();
 
-
         // remove
-        PreferenceUtil.save(context, "userID", null);
         PreferenceUtil.save(context, PREFERENCE_USER, null);
     }
 }

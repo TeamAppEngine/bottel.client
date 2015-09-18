@@ -1,22 +1,26 @@
 package io.bottel.http;
 
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import com.squareup.okhttp.OkHttpClient;
+
+import retrofit.RestAdapter;
+import retrofit.client.OkClient;
 
 /**
  * Created by Omid on 9/17/2015.
  */
 public class BottelService {
     static BottelServiceDefinition instance = null;
-    private static final String ENDPOINT_URL = "https://api.github.com";
+    private static final String ENDPOINT_URL = "http://178.238.226.60/api";
 
     public static BottelServiceDefinition getInstance() {
         if (instance == null) {
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(ENDPOINT_URL)
-                    .build();
-            instance = retrofit.create(BottelServiceDefinition.class);
+            RestAdapter.Builder builder = new RestAdapter.Builder()
+                    .setEndpoint(ENDPOINT_URL)
+                    .setClient(new OkClient(new OkHttpClient()));
+
+            RestAdapter adapter = builder.build();
+
+            instance = adapter.create(BottelServiceDefinition.class);
         }
 
         return instance;
