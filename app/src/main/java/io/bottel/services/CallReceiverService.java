@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
-import io.bottel.views.activities.CallActivity;
+import io.bottel.views.activities.call.CallActivity;
 
 /**
  * Created by Omid on 9/17/2015.
@@ -25,9 +25,8 @@ public class CallReceiverService extends Service {
         if (intent != null && intent.getExtras() != null) {
             // pass receipt email to the receiver activity
             i.putExtra(CallActivity.BUNDLE_EMAIL, intent.getExtras().getString(BUNDLE_CALLEE_EMAIL));
-
+            i.putExtra(CallActivity.BUNDLE_HAS_INCOMING, true);
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
             getApplication().startActivity(i);
         }
 

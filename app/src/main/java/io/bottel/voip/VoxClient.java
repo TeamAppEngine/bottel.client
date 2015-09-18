@@ -212,7 +212,7 @@ public class VoxClient extends VOIPService implements VoxImplantCallback {
 
     @Override
     public void onLoginSuccessful(String displayName) {
-        toast("Login succeeded.");
+        toast("Login succeeded. " + username);
         EventBus.getDefault().post(new OnLoginSuccessful());
 //        this.listener.onLoggedIn(displayName);
     }

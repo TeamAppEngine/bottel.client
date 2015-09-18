@@ -3,7 +3,6 @@ package io.bottel.views.activities.maps;
 import android.animation.ValueAnimator;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -31,15 +30,17 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import java.io.IOException;
 import java.util.List;
 
 import io.bottel.R;
+import io.bottel.http.BottelService;
+import io.bottel.models.LocalPin;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
-public class MapsActivity extends FragmentActivity{
+public class MapsActivity extends FragmentActivity {
 
     private GoogleMap mMap;
     private String[] country_iso;
@@ -61,20 +62,30 @@ public class MapsActivity extends FragmentActivity{
         mPagerAdapter = new UserPagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
 
+//        (findViewById(R.id.button_call)).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MapsActivity.this, CallActivity.class);
+//                intent.putExtra(CallActivity.BUNDLE_IS_CALLING, true);
+//                intent.putExtra(CallActivity.BUNDLE_EMAIL, "k1_gmail.com");
+//                startActivity(intent);
+//            }
+//        });
+
         country_iso = getResources().getStringArray(R.array.country_iso);
         country_name = getResources().getStringArray(R.array.country_name);
 
         //Get markers
-        Intent intent = getIntent();
-        try {
-            String markersString = intent.getStringExtra("markers");
-            JSONArray markersJSONArray = new JSONArray("[]");
-            for (int i=0; i<markersJSONArray.length(); i++) {
-                //TODO: Read markers data.
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        Intent intent = getIntent();
+//        try {
+//            String markersString = intent.getStringExtra("markers");
+//            JSONArray markersJSONArray = new JSONArray("[]");
+//            for (int i = 0; i < markersJSONArray.length(); i++) {
+//
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
 
         setUpMapIfNeeded();
         //CardView
@@ -114,20 +125,37 @@ public class MapsActivity extends FragmentActivity{
         });
     }
 
-    private void getCountryMarkers(final String countryName){
+    private void getCountryMarkers(final String countryName) {
+
         final ProgressDialog progressDialog = new ProgressDialog(MapsActivity.this);
         progressDialog.setTitle("ارتباط با سرور");
         progressDialog.setMessage("دریافت افراد آنلاین کشور مورد نظر");
         progressDialog.setCancelable(false);
         progressDialog.show();
+
         new Thread(new Runnable() {
             @Override
             public void run() {
                 Geocoder geocoder = new Geocoder(getApplicationContext());
                 try {
-                    List<Address> addressList = geocoder.getFromLocationName(countryName,1);
-                    if(addressList.size()>0){
-                        final LatLng currentLocation = new LatLng(addressList.get(0).getLatitude(),addressList.get(0).getLongitude());
+                    List<Address> addressList = geocoder.getFromLocationName(countryName, 1);
+                    if (addressList.size() > 0) {
+
+                        BottelService.getInstance().getOnlineUsersPerCountry(addressList.get(0).getCountryCode(), new Callback<List<LocalPin>>() {
+                            @Override
+                            public void success(List<LocalPin> localPins, Response response) {
+                                for (LocalPin pin : localPins) {
+                                    /// TODO
+                                }
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+
+                            }
+                        });
+
+                        final LatLng currentLocation = new LatLng(addressList.get(0).getLatitude(), addressList.get(0).getLongitude());
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -203,17 +231,16 @@ public class MapsActivity extends FragmentActivity{
                     @Override
                     public void run() {
                         try {
-                            final List<Address> addressList = geocoder.getFromLocation(latLng.latitude,latLng.longitude,1);
+                            final List<Address> addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if(addressList.size()>0){
+                                    if (addressList.size() > 0) {
                                         //Toast.makeText(getApplicationContext(), addressList.get(0).getCountryCode(),Toast.LENGTH_SHORT).show();
                                         getCountryMarkers(addressList.get(0).getCountryName());
                                         autoCompleteTextView.setText(addressList.get(0).getCountryName());
-                                    }
-                                    else
-                                        Toast.makeText(getApplicationContext(), "No Country!",Toast.LENGTH_SHORT).show();
+                                    } else
+                                        Toast.makeText(getApplicationContext(), "No Country!", Toast.LENGTH_SHORT).show();
                                 }
                             });
                         } catch (IOException e) {
