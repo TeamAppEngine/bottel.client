@@ -1,7 +1,35 @@
 package io.bottel.views;
 
-/**
- * Created by Ali on 9/18/2015.
- */
-public class SplashActivity {
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+
+import io.bottel.R;
+import io.bottel.views.mapsActivity.MapsActivity;
+
+public class SplashActivity extends Activity {
+
+    /** Duration of wait **/
+    private final int SPLASH_DISPLAY_LENGTH = 3000;
+
+    /** Called when the activity is first created. */
+    @Override
+    public void onCreate(Bundle icicle) {
+        super.onCreate(icicle);
+        setContentView(R.layout.splashscreen);
+
+        /* New Handler to start the Menu-Activity
+         * and close this Splash-Screen after some seconds.*/
+        new Handler().postDelayed(new Runnable(){
+            @Override
+            public void run() {
+                /* Create an Intent that will start the Menu-Activity. */
+                Intent mainIntent = new Intent(SplashActivity.this, SignUpActivity.class);
+                SplashActivity.this.startActivity(mainIntent);
+                SplashActivity.this.finish();
+            }
+        }, SPLASH_DISPLAY_LENGTH);
+    }
+
 }

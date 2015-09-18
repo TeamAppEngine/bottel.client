@@ -1,10 +1,65 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="io.bottel.views.mapsActivity.UserPageFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
-
-</FrameLayout>
+    tools:context="io.bottel.views.mapsActivity.UserPageFragment"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical">
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_weight="0"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_margin="5dp"/>
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/send_a_bottel_text_view_fragment_user_page"
+            android:layout_width="wrap_content"
+            android:layout_weight="0"
+            android:layout_height="wrap_content"
+            android:text="Send a bottel"
+            android:gravity="center"
+            android:background="@drawable/send_a_bottel"
+            android:textColor="#FFF"
+            android:layout_margin="5dp"
+            android:padding="10dp"/>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/sent_text_view_fragment_user_page"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="32 bottels sent"
+        android:layout_margin="5dp"/>
+    <TextView
+        android:id="@+id/received_text_view_fragment_user_page"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="64 bottels received"
+        android:layout_margin="5dp"/>
+    <TextView
+        android:id="@+id/minutes_text_view_fragment_user_page"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="128 minutes helping other"
+        android:layout_margin="5dp"/>
+    <TextView
+        android:id="@+id/reached_text_view_fragment_user_page"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="3 countries reached"
+        android:layout_margin="5dp"/>
+    <TextView
+        android:id="@+id/languages_text_view_fragment_user_page"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Languages: Persian, English"
+        android:layout_margin="5dp"/>
+</LinearLayout>

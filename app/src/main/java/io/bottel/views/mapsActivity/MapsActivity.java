@@ -6,16 +6,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -39,11 +47,20 @@ public class MapsActivity extends FragmentActivity{
     private String[] country_name;
     private AutoCompleteTextView autoCompleteTextView;
     private CardView cardView;
+    private LinearLayout linearLayout;
+
+    private static int NUM_PAGES = 5;
+    private ViewPager mPager;
+    private PagerAdapter mPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        // Instantiate a ViewPager and a PagerAdapter.
+        mPager = (ViewPager) findViewById(R.id.view_pager_activity_main);
+        mPagerAdapter = new UserPagerAdapter(getSupportFragmentManager());
+        mPager.setAdapter(mPagerAdapter);
 
         country_iso = getResources().getStringArray(R.array.country_iso);
         country_name = getResources().getStringArray(R.array.country_name);
@@ -63,6 +80,7 @@ public class MapsActivity extends FragmentActivity{
         setUpMapIfNeeded();
         //CardView
         cardView = (CardView) findViewById(R.id.card_view_activity_maps);
+        linearLayout = (LinearLayout) findViewById(R.id.linear_layout_activity_maps);
         //AutoCompleteTextView set adapter and settings.
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(MapsActivity.this,
                 android.R.layout.simple_dropdown_item_1line, country_name);
@@ -95,17 +113,6 @@ public class MapsActivity extends FragmentActivity{
                 getCountryMarkers(autoCompleteTextView.getText().toString());
             }
         });
-
-        ValueAnimator va = ValueAnimator.ofInt(150, 350);
-        va.setDuration(700);
-        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            public void onAnimationUpdate(ValueAnimator animation) {
-                Integer value = (Integer) animation.getAnimatedValue();
-                cardView.getLayoutParams().height = value.intValue();
-                cardView.requestLayout();
-            }
-        });
-        va.start();
     }
 
     private void getCountryMarkers(final String countryName){
@@ -127,6 +134,16 @@ public class MapsActivity extends FragmentActivity{
                             public void run() {
                                 progressDialog.hide();
                                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 3));
+                                ValueAnimator va = ValueAnimator.ofInt(0, dpToPx(250));
+                                va.setDuration(1000);
+                                va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                                    public void onAnimationUpdate(ValueAnimator animation) {
+                                        Integer value = (Integer) animation.getAnimatedValue();
+                                        linearLayout.getLayoutParams().height = value.intValue();
+                                        linearLayout.requestLayout();
+                                    }
+                                });
+                                va.start();
                             }
                         });
                     }
@@ -208,5 +225,31 @@ public class MapsActivity extends FragmentActivity{
 
             }
         });
+    }
+
+    private class UserPagerAdapter extends FragmentStatePagerAdapter {
+        public UserPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            UserPageFragment userPageFragment = new UserPageFragment();
+            Bundle args = new Bundle();
+            args.putInt("position", position);
+            userPageFragment.setArguments(args);
+            return userPageFragment;
+        }
+
+        @Override
+        public int getCount() {
+            return NUM_PAGES;
+        }
+    }
+
+    public int dpToPx(int dp) {
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+        return px;
     }
 }
