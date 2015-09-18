@@ -2,16 +2,15 @@ package io.bottel.views.activities.maps;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
 import io.bottel.R;
-import io.bottel.models.LocalPin;
 
 public class UserPageFragment extends Fragment {
     TextView send_a_bottel;
@@ -23,11 +22,26 @@ public class UserPageFragment extends Fragment {
 
     int position;
 
+    public interface BottleSelectionInterface {
+        void onClick(int position);
+    }
+
+    private BottleSelectionInterface onBottleClicked = null;
+
+    public BottleSelectionInterface getOnBottleClicked() {
+        return onBottleClicked;
+    }
+
+    public void setOnBottleClicked(BottleSelectionInterface onBottleClicked) {
+        this.onBottleClicked = onBottleClicked;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(
                 R.layout.fragment_user_page, container, false);
+
         position = getArguments().getInt("position");
         LocalPin currentPin = MapsActivity.localPinArrayList.get(position);
 
@@ -41,7 +55,9 @@ public class UserPageFragment extends Fragment {
         send_a_bottel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity().getApplicationContext(), String.valueOf(position), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity().getApplicationContext(), String.valueOf(position), Toast.LENGTH_SHORT).show();
+                if (onBottleClicked != null)
+                    onBottleClicked.onClick(position);
             }
         });
 

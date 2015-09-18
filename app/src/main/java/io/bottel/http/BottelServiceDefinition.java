@@ -5,6 +5,7 @@ import java.util.List;
 
 import io.bottel.models.AuthToken;
 import io.bottel.models.LocalPin;
+import io.bottel.models.Result;
 import retrofit.Callback;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
@@ -30,4 +31,7 @@ public interface BottelServiceDefinition {
 
     @GET("/countries/{country_id}/users/online")
     void getOnlineUsersPerCountry(@Path("country_id") String countryId, Callback<List<LocalPin>> callback);
+
+    @POST("/users/{user_id}/users/{partner_id}/call")
+    void getCallInfo(@Path("user_id") String userId, @Path("partner_id") String partnerId, Callback<Result> callback);
 }
