@@ -1,12 +1,11 @@
 package io.bottel.views.activities.maps;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import io.bottel.R;
 
@@ -19,6 +18,20 @@ public class UserPageFragment extends Fragment {
     TextView languages_text_view;
 
     int position;
+
+    public interface BottleSelectionInterface {
+        void onClick(int position);
+    }
+
+    private BottleSelectionInterface onBottleClicked = null;
+
+    public BottleSelectionInterface getOnBottleClicked() {
+        return onBottleClicked;
+    }
+
+    public void setOnBottleClicked(BottleSelectionInterface onBottleClicked) {
+        this.onBottleClicked = onBottleClicked;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,7 +51,9 @@ public class UserPageFragment extends Fragment {
         send_a_bottel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity().getApplicationContext(),String.valueOf(position),Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity().getApplicationContext(), String.valueOf(position), Toast.LENGTH_SHORT).show();
+                if (onBottleClicked != null)
+                    onBottleClicked.onClick(position);
             }
         });
         return rootView;

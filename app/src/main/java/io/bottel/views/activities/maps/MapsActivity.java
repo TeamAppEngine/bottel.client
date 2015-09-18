@@ -47,6 +47,7 @@ public class MapsActivity extends FragmentActivity {
     private String[] country_name;
     private AutoCompleteTextView autoCompleteTextView;
     private CardView cardView;
+    private List<LocalPin> localPins = null;
     private LinearLayout linearLayout;
 
     private static int NUM_PAGES = 5;
@@ -62,30 +63,8 @@ public class MapsActivity extends FragmentActivity {
         mPagerAdapter = new UserPagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
 
-//        (findViewById(R.id.button_call)).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(MapsActivity.this, CallActivity.class);
-//                intent.putExtra(CallActivity.BUNDLE_IS_CALLING, true);
-//                intent.putExtra(CallActivity.BUNDLE_EMAIL, "k1_gmail.com");
-//                startActivity(intent);
-//            }
-//        });
-
         country_iso = getResources().getStringArray(R.array.country_iso);
         country_name = getResources().getStringArray(R.array.country_name);
-
-        //Get markers
-//        Intent intent = getIntent();
-//        try {
-//            String markersString = intent.getStringExtra("markers");
-//            JSONArray markersJSONArray = new JSONArray("[]");
-//            for (int i = 0; i < markersJSONArray.length(); i++) {
-//
-//            }
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
 
         setUpMapIfNeeded();
         //CardView
@@ -144,6 +123,7 @@ public class MapsActivity extends FragmentActivity {
                         BottelService.getInstance().getOnlineUsersPerCountry(addressList.get(0).getCountryCode(), new Callback<List<LocalPin>>() {
                             @Override
                             public void success(List<LocalPin> localPins, Response response) {
+                                MapsActivity.this.localPins = localPins;
                                 for (LocalPin pin : localPins) {
                                     /// TODO
                                 }
@@ -260,6 +240,7 @@ public class MapsActivity extends FragmentActivity {
         @Override
         public Fragment getItem(int position) {
             UserPageFragment userPageFragment = new UserPageFragment();
+            userPageFragment.setOnBottleClicked(bottleSelectionInterface);
             Bundle args = new Bundle();
             args.putInt("position", position);
             userPageFragment.setArguments(args);
@@ -271,6 +252,13 @@ public class MapsActivity extends FragmentActivity {
             return NUM_PAGES;
         }
     }
+
+    UserPageFragment.BottleSelectionInterface bottleSelectionInterface = new UserPageFragment.BottleSelectionInterface() {
+        @Override
+        public void onClick(int position) {
+            // TODO open
+        }
+    };
 
     public int dpToPx(int dp) {
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
