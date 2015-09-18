@@ -57,7 +57,7 @@ public class MapsActivity extends FragmentActivity {
     private List<LocalPin> localPins = null;
     private LinearLayout linearLayout;
 
-    static int NUM_PAGES = 5;
+    static int NUM_PAGES;
     ViewPager mPager;
     PagerAdapter mPagerAdapter;
 
@@ -72,7 +72,6 @@ public class MapsActivity extends FragmentActivity {
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager) findViewById(R.id.view_pager_activity_main);
         mPagerAdapter = new UserPagerAdapter(getSupportFragmentManager());
-        mPager.setAdapter(mPagerAdapter);
 
 
         country_iso = getResources().getStringArray(R.array.country_iso);
@@ -118,11 +117,11 @@ public class MapsActivity extends FragmentActivity {
 
     private void getCountryMarkers(final String countryName) {
 
-        final ProgressDialog progressDialog = new ProgressDialog(MapsActivity.this);
-        progressDialog.setTitle("ارتباط با سرور");
-        progressDialog.setMessage("دریافت افراد آنلاین کشور مورد نظر");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
+//        final ProgressDialog progressDialog = new ProgressDialog(MapsActivity.this);
+//        progressDialog.setTitle("ارتباط با سرور");
+//        progressDialog.setMessage("دریافت افراد آنلاین کشور مورد نظر");
+//        progressDialog.setCancelable(false);
+//        progressDialog.show();
 
         new Thread(new Runnable() {
             @Override
@@ -138,9 +137,26 @@ public class MapsActivity extends FragmentActivity {
                                 localPinArrayList = localPins;
                                 NUM_PAGES = localPins.size();
                                 mMap.clear();
-                                for(LocalPin localPin: localPins){
-                                    markers.add(mMap.addMarker(new MarkerOptions().position(new LatLng(localPin.getX(), localPin.getY()))));
+                                for (LocalPin localPin : localPins) {
+                                    markers.add(mMap.addMarker(new MarkerOptions().position(new LatLng(localPin.getX() - 3, localPin.getY()))));
                                 }
+                                mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                                    @Override
+                                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                                    }
+
+                                    @Override
+                                    public void onPageSelected(int position) {
+                                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(localPinArrayList.get(position).getX() - 5, localPinArrayList.get(position).getY()), 3));
+                                    }
+
+                                    @Override
+                                    public void onPageScrollStateChanged(int state) {
+
+                                    }
+                                });
+                                mPager.setAdapter(mPagerAdapter);
                             }
 
                             @Override
@@ -153,9 +169,10 @@ public class MapsActivity extends FragmentActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                progressDialog.hide();
+//                                progressDialog.hide();
                                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 3));
                                 ValueAnimator va = ValueAnimator.ofInt(0, dpToPx(250));
+
                                 va.setDuration(1000);
                                 va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                                     public void onAnimationUpdate(ValueAnimator animation) {
@@ -231,7 +248,7 @@ public class MapsActivity extends FragmentActivity {
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+//        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(final LatLng latLng) {
@@ -269,6 +286,7 @@ public class MapsActivity extends FragmentActivity {
         @Override
         public Fragment getItem(int position) {
             UserPageFragment userPageFragment = new UserPageFragment();
+            userPageFragment.setOnBottleClicked(bottleSelectionInterface);
             Bundle args = new Bundle();
             args.putInt("position", position);
             userPageFragment.setArguments(args);

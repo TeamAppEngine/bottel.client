@@ -60,6 +60,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     private void configureControls() {
         registerButton.setOnClickListener(this);
+        loginButton.setOnClickListener(this);
     }
 
     private void findControls(View view) {

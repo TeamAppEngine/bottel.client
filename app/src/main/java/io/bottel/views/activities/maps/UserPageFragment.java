@@ -1,14 +1,11 @@
 package io.bottel.views.activities.maps;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import java.util.List;
 
 import io.bottel.R;
 import io.bottel.models.LocalPin;
@@ -67,8 +64,8 @@ public class UserPageFragment extends Fragment {
         minutes_text_view.setText(currentPin.getMinutes_spoken() + " minutes helping others");
         reached_text_view.setText(currentPin.getCountries_to().size() + " countries reached");
         String languages = "";
-        for(String language : currentPin.getLanguages()){
-            language +=language + ", ";
+        for (String language : currentPin.getLanguages()) {
+            language += language + ", ";
         }
         languages_text_view.setText("Languages: " + languages);
         return rootView;
