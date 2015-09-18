@@ -3,7 +3,6 @@ package io.bottel.views.activities.maps;
 import android.animation.ValueAnimator;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -31,13 +30,15 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import java.io.IOException;
 import java.util.List;
 
 import io.bottel.R;
+import io.bottel.http.BottelService;
+import io.bottel.models.LocalPin;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class MapsActivity extends FragmentActivity {
 
@@ -75,16 +76,16 @@ public class MapsActivity extends FragmentActivity {
         country_name = getResources().getStringArray(R.array.country_name);
 
         //Get markers
-        Intent intent = getIntent();
-        try {
-            String markersString = intent.getStringExtra("markers");
-            JSONArray markersJSONArray = new JSONArray("[]");
-            for (int i = 0; i < markersJSONArray.length(); i++) {
-                //TODO: Read markers data.
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        Intent intent = getIntent();
+//        try {
+//            String markersString = intent.getStringExtra("markers");
+//            JSONArray markersJSONArray = new JSONArray("[]");
+//            for (int i = 0; i < markersJSONArray.length(); i++) {
+//
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
 
         setUpMapIfNeeded();
         //CardView
@@ -125,11 +126,13 @@ public class MapsActivity extends FragmentActivity {
     }
 
     private void getCountryMarkers(final String countryName) {
+
         final ProgressDialog progressDialog = new ProgressDialog(MapsActivity.this);
         progressDialog.setTitle("ارتباط با سرور");
         progressDialog.setMessage("دریافت افراد آنلاین کشور مورد نظر");
         progressDialog.setCancelable(false);
         progressDialog.show();
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -137,6 +140,21 @@ public class MapsActivity extends FragmentActivity {
                 try {
                     List<Address> addressList = geocoder.getFromLocationName(countryName, 1);
                     if (addressList.size() > 0) {
+
+                        BottelService.getInstance().getOnlineUsersPerCountry(addressList.get(0).getCountryCode(), new Callback<List<LocalPin>>() {
+                            @Override
+                            public void success(List<LocalPin> localPins, Response response) {
+                                for (LocalPin pin : localPins) {
+                                    /// TODO
+                                }
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+
+                            }
+                        });
+
                         final LatLng currentLocation = new LatLng(addressList.get(0).getLatitude(), addressList.get(0).getLongitude());
                         runOnUiThread(new Runnable() {
                             @Override
