@@ -8,6 +8,21 @@
     <FrameLayout
         android:id="@+id/wrapper"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/text_view_time_activity_call"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Wating..."
+                android:gravity="center"
+                android:textSize="36sp"
+                android:layout_below="@id/text_view_name_activity_call"
+                android:layout_marginTop="15dp"/>
+        </RelativeLayout>
+    </FrameLayout>
 
 </LinearLayout>

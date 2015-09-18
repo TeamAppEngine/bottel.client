@@ -28,9 +28,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.bottel.R;
@@ -49,9 +51,12 @@ public class MapsActivity extends FragmentActivity {
     private CardView cardView;
     private LinearLayout linearLayout;
 
-    private static int NUM_PAGES = 5;
+    private static int NUM_PAGES;
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;
+
+    public static List<LocalPin> localPinArrayList = new ArrayList<>();
+    public List<Marker> markers = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +65,6 @@ public class MapsActivity extends FragmentActivity {
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager) findViewById(R.id.view_pager_activity_main);
         mPagerAdapter = new UserPagerAdapter(getSupportFragmentManager());
-        mPager.setAdapter(mPagerAdapter);
 
 //        (findViewById(R.id.button_call)).setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -140,13 +144,59 @@ public class MapsActivity extends FragmentActivity {
                 try {
                     List<Address> addressList = geocoder.getFromLocationName(countryName, 1);
                     if (addressList.size() > 0) {
-
                         BottelService.getInstance().getOnlineUsersPerCountry(addressList.get(0).getCountryCode(), new Callback<List<LocalPin>>() {
                             @Override
                             public void success(List<LocalPin> localPins, Response response) {
-                                for (LocalPin pin : localPins) {
-                                    /// TODO
+                                localPinArrayList = localPins;
+                                NUM_PAGES = localPins.size();
+                                mMap.clear();
+                                for(LocalPin localPin: localPins){
+                                    markers.add(mMap.addMarker(new MarkerOptions().position(new LatLng(localPin.getX(), localPin.getY()))));
                                 }
+
+                                mPager.setAdapter(mPagerAdapter);
+                                mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                                    @Override
+                                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                                    }
+
+                                    @Override
+                                    public void onPageSelected(int position) {
+                                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(localPinArrayList.get(position).getX()-3, localPinArrayList.get(position).getY()), 5));
+                                    }
+
+                                    @Override
+                                    public void onPageScrollStateChanged(int state) {
+
+                                    }
+                                });
+
+                                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                                    @Override
+                                    public boolean onMarkerClick(Marker marker) {
+                                        mPager.setCurrentItem(markers.indexOf(marker));
+                                        return false;
+                                    }
+                                });
+
+                                progressDialog.hide();
+                                if(NUM_PAGES>0){
+                                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(localPins.get(0).getX(),localPins.get(0).getY()), 3));
+                                    ValueAnimator va = ValueAnimator.ofInt(0, dpToPx(250));
+                                    va.setDuration(1000);
+                                    va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                                        public void onAnimationUpdate(ValueAnimator animation) {
+                                            Integer value = (Integer) animation.getAnimatedValue();
+                                            linearLayout.getLayoutParams().height = value.intValue();
+                                            linearLayout.requestLayout();
+                                        }
+                                    });
+                                    va.start();
+                                }else{
+                                    linearLayout.getLayoutParams().height = 0;
+                                }
+
                             }
 
                             @Override
@@ -222,7 +272,6 @@ public class MapsActivity extends FragmentActivity {
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(final LatLng latLng) {

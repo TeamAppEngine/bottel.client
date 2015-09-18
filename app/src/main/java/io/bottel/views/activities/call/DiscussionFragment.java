@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import io.bottel.BottelApp;
 import io.bottel.R;
@@ -15,7 +16,7 @@ import io.bottel.R;
  * Created by Omid on 9/18/2015.
  */
 public class DiscussionFragment extends Fragment {
-    Button hangup;
+    TextView hangup;
 
     @Nullable
     @Override
@@ -27,7 +28,7 @@ public class DiscussionFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        hangup = (Button) view.findViewById(R.id.button_hangup);
+        hangup = (TextView) view.findViewById(R.id.button_hangup);
         hangup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
