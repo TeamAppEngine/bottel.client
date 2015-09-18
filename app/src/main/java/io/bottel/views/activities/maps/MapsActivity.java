@@ -2,11 +2,14 @@ package io.bottel.views.activities.maps;
 
 import android.animation.ValueAnimator;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -33,7 +36,16 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.util.List;
 
+import de.greenrobot.event.EventBus;
+import io.bottel.BottelApp;
 import io.bottel.R;
+import io.bottel.models.User;
+import io.bottel.models.events.OnConnectionStateChanged;
+import io.bottel.models.events.OnLoginSuccessful;
+import io.bottel.models.events.OnUserLoggedIn;
+import io.bottel.services.KeepAliveConnectionService;
+import io.bottel.services.PresenceService;
+import io.bottel.utils.AuthManager;
 import io.bottel.views.fragments.LoginFragment;
 
 public class MapsActivity extends FragmentActivity implements View.OnClickListener {
@@ -116,6 +128,71 @@ public class MapsActivity extends FragmentActivity implements View.OnClickListen
         va.start();
     }
 
+    private boolean isBound = false;
+    KeepAliveConnectionService service;
+    private ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            // get the service...
+            service = ((KeepAliveConnectionService.LocalBinder) iBinder).getService();
+            isBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            isBound = false;
+        }
+    };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setUpMapIfNeeded();
+        EventBus.getDefault().register(this);
+
+        if (AuthManager.isLoggedIn(this)) {
+            bindKeepAliveConnection();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
+
+
+    public void onEvent(OnUserLoggedIn event) {
+        if (!isBound) {
+            bindKeepAliveConnection();
+        }
+    }
+
+    private void bindKeepAliveConnection() {
+        Intent intent = new Intent(this, KeepAliveConnectionService.class);
+        bindService(intent, connection, BIND_AUTO_CREATE);
+    }
+
+    public void onEvent(OnLoginSuccessful event) {
+        Toast.makeText(this, "logged in", Toast.LENGTH_SHORT).show();
+        startService(new Intent(this, PresenceService.class));
+    }
+
+    public void onEvent(OnConnectionStateChanged change) {
+        User user = AuthManager.getUser(MapsActivity.this);
+
+        // sign u
+        if (user == null)
+            return;
+
+        if (change.getState() == OnConnectionStateChanged.States.FAILED && !BottelApp.getInstance().getCallService().isConnected()) {
+            Toast.makeText(MapsActivity.this, "trying again..", Toast.LENGTH_SHORT).show();
+        } else if (change.getState() == OnConnectionStateChanged.States.CONNECTED) {
+            Toast.makeText(MapsActivity.this, "logging in..", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
     private void getCountryMarkers(final String countryName) {
         final ProgressDialog progressDialog = new ProgressDialog(MapsActivity.this);
         progressDialog.setTitle("ارتباط با سرور");
@@ -145,12 +222,6 @@ public class MapsActivity extends FragmentActivity implements View.OnClickListen
         }).start();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        setUpMapIfNeeded();
-    }
-
     /**
      * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
      * installed) and the map has not already been instantiated.. This will ensure that we only ever
@@ -167,6 +238,7 @@ public class MapsActivity extends FragmentActivity implements View.OnClickListen
      * method in {@link #onResume()} to guarantee that it will be called.
      */
     private void setUpMapIfNeeded() {
+
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
             // Try to obtain the map from the SupportMapFragment.
@@ -212,7 +284,6 @@ public class MapsActivity extends FragmentActivity implements View.OnClickListen
                         }
                     }
                 }).start();
-
             }
         });
     }

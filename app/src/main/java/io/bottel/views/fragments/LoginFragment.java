@@ -1,5 +1,6 @@
 package io.bottel.views.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import io.bottel.R;
 import io.bottel.http.BottelService;
 import io.bottel.models.AuthToken;
 import io.bottel.models.User;
+import io.bottel.services.KeepAliveConnectionService;
 import io.bottel.utils.AuthManager;
 import io.bottel.utils.EmailValidator;
 import io.bottel.utils.GUtils;
@@ -74,7 +76,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                             user.setEmail(email);
                             user.setUserID(authToken.getUserId());
                             AuthManager.login(getActivity(), user);
-                            closeMe();
+                            getActivity().startService(new Intent(getActivity(), KeepAliveConnectionService.class));
+                            changeProfile();
                         }
 
                         @Override
@@ -87,7 +90,18 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void closeMe() {
-        getFragmentManager().beginTransaction().remove(this).commit();
+    private void changeProfile() {
+        // replace with profile fragment
+//        Fragment fragment = Fragment.instantiate(getActivity(), ProfileFragment.class.getName());
+//        getFragmentManager().beginTransaction()
+//                .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+//                .replace(R.id.frame_wrapper, fragment)
+//                .commit();
+
+        // remove this fragment
+        getFragmentManager().beginTransaction()
+                .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                .remove(this)
+                .commit();
     }
 }

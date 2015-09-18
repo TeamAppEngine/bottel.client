@@ -225,7 +225,6 @@ public class VoxClient extends VOIPService implements VoxImplantCallback {
         toast("call received in voxclient " + from);
         currentCallId = callId;
 //        EventBus.getDefault().post(new OnIncomingCallReceived(callId, from, displayName, videoCall, headers));
-
         Intent intent = new Intent(context, CallReceiverService.class);
         intent.putExtra(CallReceiverService.BUNDLE_CALLEE_EMAIL, displayName);
         context.startService(intent);

@@ -28,7 +28,6 @@ public class KeepAliveConnectionService extends Service {
         }
     }
 
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -65,7 +64,7 @@ public class KeepAliveConnectionService extends Service {
             this.callService.loginAsync(getApplicationContext(), user.getVoxAddress(), user.getVoxPassword());
         }
 
-        return START_REDELIVER_INTENT;
+        return START_STICKY;
     }
 
     @Override

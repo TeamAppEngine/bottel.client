@@ -21,6 +21,12 @@ public class User {
     @SerializedName("country_iso")
     private String countryISO;
 
+    @SerializedName("full_name")
+    private String fullName;
+
+    @SerializedName("about")
+    private String about;
+
 
     public User() {
     }
@@ -83,5 +89,22 @@ public class User {
 
     public String getVoxPassword() {
         return "1234567";
+    }
+
+    public String getFullName() {
+
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getAbout() {
+        return about;
+    }
+
+    public void setAbout(String about) {
+        this.about = about;
     }
 }
