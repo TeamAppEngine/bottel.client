@@ -29,15 +29,6 @@
 
         android:theme="@style/AppTheme" >
         <activity android:name=".views.SplashActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".views.MainActivity"
-            android:label="@string/app_name">
         </activity>
         <meta-data
             android:name="com.google.android.gms.version"
@@ -47,8 +38,13 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".views.mapsActivity.MapsActivity"
+            android:name=".views.activities.maps.MapsActivity"
             android:label="@string/title_activity_maps" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <service android:name=".services.KeepAliveConnectionService" />

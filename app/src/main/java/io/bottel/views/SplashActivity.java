@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import io.bottel.R;
-import io.bottel.views.mapsActivity.MapsActivity;
 
 public class SplashActivity extends Activity {
 

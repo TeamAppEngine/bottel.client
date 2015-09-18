@@ -2,24 +2,27 @@ package io.bottel.views.activities.maps;
 
 import android.animation.ValueAnimator;
 import android.app.ProgressDialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
-import android.os.IBinder;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -34,18 +37,9 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.util.List;
 
-import de.greenrobot.event.EventBus;
-import io.bottel.BottelApp;
 import io.bottel.R;
-import io.bottel.models.User;
-import io.bottel.models.events.OnConnectionStateChanged;
-import io.bottel.models.events.OnLoginSuccessful;
-import io.bottel.models.events.OnUserLoggedIn;
-import io.bottel.services.KeepAliveConnectionService;
-import io.bottel.services.PresenceService;
-import io.bottel.utils.AuthManager;
 
-public class MapsActivity extends FragmentActivity implements View.OnClickListener {
+public class MapsActivity extends FragmentActivity{
 
     private GoogleMap mMap;
     private String[] country_iso;
