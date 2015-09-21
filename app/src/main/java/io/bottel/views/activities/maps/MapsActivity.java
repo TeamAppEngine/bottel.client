@@ -2,10 +2,14 @@ package io.bottel.views.activities.maps;
 
 import android.animation.ValueAnimator;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -40,6 +44,8 @@ import io.bottel.R;
 import io.bottel.http.BottelService;
 import io.bottel.models.LocalPin;
 import io.bottel.models.events.OnLoginSuccessful;
+import io.bottel.models.events.OnUserLoggedIn;
+import io.bottel.services.KeepAliveConnectionService;
 import io.bottel.utils.AuthManager;
 import io.bottel.views.fragments.LoginFragment;
 import retrofit.Callback;
@@ -192,6 +198,22 @@ public class MapsActivity extends FragmentActivity {
         }).start();
     }
 
+    private boolean isBound = false;
+    KeepAliveConnectionService service;
+    private ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            // get the service...
+            service = ((KeepAliveConnectionService.LocalBinder) iBinder).getService();
+            isBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            isBound = false;
+        }
+    };
+
     public void onEvent(OnLoginSuccessful loggedIn) {
         if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
@@ -204,6 +226,23 @@ public class MapsActivity extends FragmentActivity {
         super.onResume();
         setUpMapIfNeeded();
         EventBus.getDefault().register(this);
+
+
+        if (AuthManager.isLoggedIn(this)) {
+            bindKeepAliveConnection();
+        }
+    }
+
+
+    public void onEvent(OnUserLoggedIn event) {
+        if (!isBound) {
+            bindKeepAliveConnection();
+        }
+    }
+
+    private void bindKeepAliveConnection() {
+        Intent intent = new Intent(this, KeepAliveConnectionService.class);
+        bindService(intent, connection, BIND_AUTO_CREATE);
     }
 
     /**

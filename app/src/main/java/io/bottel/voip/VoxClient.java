@@ -2,7 +2,6 @@ package io.bottel.voip;
 
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
 import com.zingaya.voximplant.VoxImplantCallback;
 import com.zingaya.voximplant.VoxImplantClient;
@@ -86,7 +85,7 @@ public class VoxClient extends VOIPService implements VoxImplantCallback {
 
     @Override
     public void connect(Context context) {
-        Toast.makeText(context, "connecting..", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(context, "connecting..", Toast.LENGTH_SHORT).show();
 
         if (!isConnected)
             client.connect();
@@ -97,7 +96,7 @@ public class VoxClient extends VOIPService implements VoxImplantCallback {
     public void call(String receipt) {
         currentCallId = client.createCall(receipt, false, null); // (receiptId, videoEnabled, customData)
         Map<String, String> headers = new HashMap<>();
-        toast("calling.. " + receipt);
+//        toast("calling.. " + receipt);
         headers.put("X-DirectCall", "true");
 
         client.startCall(currentCallId, headers);
@@ -231,7 +230,7 @@ public class VoxClient extends VOIPService implements VoxImplantCallback {
     }
 
     private void toast(String message) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -242,7 +241,7 @@ public class VoxClient extends VOIPService implements VoxImplantCallback {
     @Override
     public void onCallFailed(String callId, int code, String reason, Map<String, String> headers) {
         currentCallId = null;
-        Toast.makeText(context, reason, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(context, reason, Toast.LENGTH_SHORT).show();
     }
 
     @Override

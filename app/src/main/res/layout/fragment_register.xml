@@ -77,6 +77,7 @@
 
             <io.bottel.views.custom.FFTextView
                 android:id="@+id/button_login"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="7dp"

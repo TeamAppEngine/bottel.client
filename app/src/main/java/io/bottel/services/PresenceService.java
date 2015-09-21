@@ -37,8 +37,8 @@ public class PresenceService extends Service {
 
             if (currentUser != null) {
                 if (CallServiceManager.getCallService() != null && CallServiceManager.getCallService().isConnected()) {
-                    Toast.makeText(getApplicationContext(), "ping", Toast.LENGTH_SHORT).show();
-                    Toast.makeText(getApplicationContext(), "pong", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), "ping", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), "pong", Toast.LENGTH_SHORT).show();
 
                     BottelService.getInstance().updatePresence(currentUser.getUserID(), new Callback<List<String>>() {
                         @Override

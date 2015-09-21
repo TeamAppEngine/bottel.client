@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import io.bottel.R;
 import io.bottel.http.BottelService;
@@ -56,7 +55,7 @@ public class TopicSelectionFragment extends Fragment {
 
                         @Override
                         public void failure(RetrofitError error) {
-                            Toast.makeText(getActivity(), "something went wrong", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(getActivity(), "something went wrong", Toast.LENGTH_SHORT).show();
                         }
                     });
             }

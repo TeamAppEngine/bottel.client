@@ -6,13 +6,18 @@
     android:orientation="vertical">
 
 
-    <TextView
-        android:id="@+id/text_view_time_activity_call"
+    <FrameLayout
+        android:id="@+id/wrapper"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:gravity="center"
-        android:text="Wating..."
-        android:textSize="36sp" />
+        android:layout_height="match_parent" />
+
+    <!--<TextView-->
+        <!--android:id="@+id/text_view_time_activity_call"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="15dp"-->
+        <!--android:gravity="center"-->
+        <!--android:text="Wating..."-->
+        <!--android:textSize="36sp" />-->
 
 </LinearLayout>

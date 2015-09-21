@@ -29,7 +29,7 @@ public class CallActivity extends FragmentActivity {
             Fragment fragment = Fragment.instantiate(this, IncommingCallFragment.class.getName());
             getSupportFragmentManager().beginTransaction().add(R.id.wrapper, fragment, null).commit();
         } else if (getIntent().getExtras().containsKey(BUNDLE_IS_CALLING)) {
-            email = "k1_gmail.com";
+            email = "a.yarveisi_gmail.com";
             BottelApp.getInstance().getCallService().call(email);
             Fragment fragment = Fragment.instantiate(this, CallingFragment.class.getName());
             getSupportFragmentManager().beginTransaction().add(R.id.wrapper, fragment, null).commit();

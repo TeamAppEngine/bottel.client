@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.widget.Toast;
 
 import io.bottel.models.User;
 import io.bottel.utils.AuthManager;
@@ -44,7 +43,7 @@ public class KeepAliveConnectionService extends Service {
             return;
 
         this.callService.loginAsync(getApplicationContext(), user.getVoxAddress(), user.getVoxPassword());
-        Toast.makeText(getApplicationContext(), "call service started.", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), "call service started.", Toast.LENGTH_SHORT).show();
     }
 
     public VOIPService getCallService() {
@@ -69,7 +68,7 @@ public class KeepAliveConnectionService extends Service {
 
     @Override
     public void onDestroy() {
-        Toast.makeText(getApplicationContext(), "call service destroyed.", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), "call service destroyed.", Toast.LENGTH_SHORT).show();
         super.onDestroy();
     }
 }
