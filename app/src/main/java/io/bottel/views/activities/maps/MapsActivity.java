@@ -144,7 +144,7 @@ public class MapsActivity extends FragmentActivity {
                                 NUM_PAGES = localPins.size();
                                 mMap.clear();
                                 for (LocalPin localPin : localPins) {
-                                    markers.add(mMap.addMarker(new MarkerOptions().position(new LatLng(localPin.getX() - 3, localPin.getY()))));
+                                    markers.add(mMap.addMarker(new MarkerOptions().position(new LatLng(localPin.getX(), localPin.getY()))));
                                 }
                                 mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                                     @Override
@@ -154,7 +154,7 @@ public class MapsActivity extends FragmentActivity {
 
                                     @Override
                                     public void onPageSelected(int position) {
-                                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(localPinArrayList.get(position).getX() - 5, localPinArrayList.get(position).getY()), 3));
+                                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(localPinArrayList.get(position).getX() - 3, localPinArrayList.get(position).getY()), 6));
                                     }
 
                                     @Override
@@ -171,7 +171,7 @@ public class MapsActivity extends FragmentActivity {
                             }
                         });
 
-                        final LatLng currentLocation = new LatLng(addressList.get(0).getLatitude(), addressList.get(0).getLongitude());
+                        final LatLng currentLocation = new LatLng(addressList.get(0).getLatitude()-12, addressList.get(0).getLongitude());
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

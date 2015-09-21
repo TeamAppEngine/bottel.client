@@ -74,11 +74,11 @@ public class PresenceService extends Service {
 //                    Toast.makeText(getApplicationContext(), "user does not receive calls", Toast.LENGTH_SHORT).show();
 //                }
 
-            } else
-                Toast.makeText(getApplicationContext(), "user is null", Toast.LENGTH_SHORT).show();
+            } else{}
+//                Toast.makeText(getApplicationContext(), "user is null", Toast.LENGTH_SHORT).show();
 
-        } else
-            Toast.makeText(getApplicationContext(), "context is null", Toast.LENGTH_SHORT).show();
+        } else{}
+//            Toast.makeText(getApplicationContext(), "context is null", Toast.LENGTH_SHORT).show();
         return START_NOT_STICKY;
     }
 }
