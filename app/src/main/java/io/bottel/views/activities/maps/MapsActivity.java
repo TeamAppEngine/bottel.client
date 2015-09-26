@@ -119,15 +119,27 @@ public class MapsActivity extends FragmentActivity {
                 getCountryMarkers(autoCompleteTextView.getText().toString());
             }
         });
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                try{
+                    mPager.setCurrentItem(markers.indexOf(marker));
+                }catch(Exception e){
+
+                }
+                return false;
+            }
+        });
     }
 
     private void getCountryMarkers(final String countryName) {
 
-//        final ProgressDialog progressDialog = new ProgressDialog(MapsActivity.this);
-//        progressDialog.setTitle("ارتباط با سرور");
-//        progressDialog.setMessage("دریافت افراد آنلاین کشور مورد نظر");
-//        progressDialog.setCancelable(false);
-//        progressDialog.show();
+        final ProgressDialog progressDialog = new ProgressDialog(MapsActivity.this);
+        progressDialog.setTitle("ارتباط با سرور");
+        progressDialog.setMessage("دریافت افراد آنلاین کشور مورد نظر");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
 
         new Thread(new Runnable() {
             @Override
@@ -143,17 +155,18 @@ public class MapsActivity extends FragmentActivity {
                                 localPinArrayList = localPins;
                                 NUM_PAGES = localPins.size();
                                 mMap.clear();
+                                markers.clear();
                                 for (LocalPin localPin : localPins) {
                                     markers.add(mMap.addMarker(new MarkerOptions().position(new LatLng(localPin.getX(), localPin.getY()))));
                                 }
                                 mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                                     @Override
                                     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
                                     }
 
                                     @Override
                                     public void onPageSelected(int position) {
+
                                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(localPinArrayList.get(position).getX() - 3, localPinArrayList.get(position).getY()), 6));
                                     }
 
@@ -163,6 +176,7 @@ public class MapsActivity extends FragmentActivity {
                                     }
                                 });
                                 mPager.setAdapter(mPagerAdapter);
+                                progressDialog.dismiss();
                             }
 
                             @Override
@@ -171,12 +185,12 @@ public class MapsActivity extends FragmentActivity {
                             }
                         });
 
-                        final LatLng currentLocation = new LatLng(addressList.get(0).getLatitude()-12, addressList.get(0).getLongitude());
+                        final LatLng currentLocation = new LatLng(addressList.get(0).getLatitude()-3, addressList.get(0).getLongitude());
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
 //                                progressDialog.hide();
-                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 3));
+                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 6));
                                 ValueAnimator va = ValueAnimator.ofInt(0, dpToPx(250));
 
                                 va.setDuration(1000);
