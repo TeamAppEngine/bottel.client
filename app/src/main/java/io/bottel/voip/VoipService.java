@@ -18,7 +18,7 @@ public abstract class VOIPService {
     public void hangUp(Context context) {
 //        if (context != null)
 //            PresencePersistent.setCurrentState(context, PresencePersistent.State.AVAILABLE);
-    }
+    }   
 
     public abstract boolean isOnCall();
 

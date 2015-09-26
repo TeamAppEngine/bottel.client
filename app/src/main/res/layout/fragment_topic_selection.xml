@@ -1,45 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#fff"
-    android:clickable="true"
-    android:focusable="true"
-    android:gravity="center|top"
-    android:orientation="vertical"
-    android:padding="@dimen/activity_horizontal_margin">
-
-    <io.bottel.views.custom.FFTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/message_select_topic"
-        android:textSize="27sp" />
-
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:entries="@array/topics" />
+    android:layout_height="wrap_content">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
-        android:orientation="horizontal">
+        android:background="#fff"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center|top"
+        android:orientation="vertical"
+        android:padding="@dimen/activity_horizontal_margin">
 
         <io.bottel.views.custom.FFTextView
-            android:id="@+id/button_reach_out"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/card_view_password_activity_sign_up"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="7dp"
-            android:background="@drawable/signup_oval"
-            android:gravity="center"
-            android:padding="20dp"
-            android:text="Reach out"
-            android:textColor="#FFFFFF"
-            android:textSize="20dp" />
+            android:text="@string/message_select_topic"
+            android:textSize="27sp" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/topics" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <io.bottel.views.custom.FFButtonView
+                android:id="@+id/button_reach_out"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/card_view_password_activity_sign_up"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="7dp"
+                android:background="@drawable/signup_oval"
+                android:gravity="center"
+                android:padding="20dp"
+                android:text="Reach out"
+                android:textColor="#FFFFFF"
+                android:textSize="20dp" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+</RelativeLayout>

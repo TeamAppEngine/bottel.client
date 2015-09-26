@@ -63,11 +63,11 @@ public class UserPageFragment extends Fragment {
         received_text_view.setText(currentPin.getReceive_calls_count() + " bottels received");
         minutes_text_view.setText(currentPin.getMinutes_spoken() + " minutes helping others");
         reached_text_view.setText(currentPin.getCountries_to().size() + " countries reached");
-        String languages = "";
-        for (String language : currentPin.getLanguages()) {
-            language += language + ", ";
-        }
-        languages_text_view.setText("Languages: " + languages);
+//        String languages = "";
+//        for (String language : currentPin.getLanguages().getLanguage()) {
+//            language += language + ", ";
+//        }
+//        languages_text_view.setText("Language: " + languages);
         return rootView;
     }
 }
