@@ -34,5 +34,5 @@ public interface BottelServiceDefinition {
 
     @FormUrlEncoded
     @POST("/users/{user_id}/users/{partner_id}/call")
-    void getCallInfo(@Path("user_id") String userId, @Path("partner_id") String partnerId, @Field("topic") String topic, Callback<Result> callback);
+    void getCallInfo(@Path("user_id") String userId, @Path("partner_id") String partnerId, @Field("topic") String topic, Callback<Integer> callback);
 }

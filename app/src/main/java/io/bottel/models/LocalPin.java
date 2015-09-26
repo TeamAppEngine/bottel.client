@@ -24,8 +24,8 @@ public class LocalPin {
     private double rate;
     @SerializedName("minutes_spoken")
     private int minutes_spoken;
-    @SerializedName("languages")
-    private List<String> languages;
+//    @SerializedName("languages")
+//    private Language languages;
     @SerializedName("id")
     private String id;
 
@@ -92,14 +92,14 @@ public class LocalPin {
     public void setMinutes_spoken(int minutes_spoken) {
         this.minutes_spoken = minutes_spoken;
     }
-
-    public List<String> getLanguages() {
-        return languages;
-    }
-
-    public void setLanguages(List<String> languages) {
-        this.languages = languages;
-    }
+//
+//    public Language getLanguages() {
+//        return languages;
+//    }
+//
+//    public void setLanguages(Language languages) {
+//        this.languages = languages;
+//    }
 
     public String getId() {
         return id;

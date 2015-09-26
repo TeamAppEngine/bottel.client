@@ -7,7 +7,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import io.bottel.R;
 import io.bottel.http.BottelService;
@@ -27,6 +30,8 @@ public class TopicSelectionFragment extends Fragment {
     private static final String PARTNER_ID = "a.yarveisi@gmail.com";
 
     Spinner spinner;
+    ProgressBar progressBar;
+    Button reachOutButton;
 
     @Nullable
     @Override
@@ -38,8 +43,10 @@ public class TopicSelectionFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         spinner = (Spinner) view.findViewById(R.id.spinner);
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        reachOutButton = (Button) view.findViewById(R.id.button_reach_out);
 
-        view.findViewById(R.id.button_reach_out).setOnClickListener(new View.OnClickListener() {
+        reachOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int selection = spinner.getSelectedItemPosition();
@@ -47,17 +54,27 @@ public class TopicSelectionFragment extends Fragment {
                 User user = AuthManager.getUser(getActivity());
                 PreferenceUtil.save(getActivity(), "topic", topics[selection]);
                 if (user != null)
-                    BottelService.getInstance().getCallInfo(user.getUserID(), PARTNER_ID, topics[selection], new Callback<Result>() {
-                        @Override
-                        public void success(Result result, Response response) {
+                    progressBar.setVisibility(View.VISIBLE);
+                reachOutButton.setEnabled(false);
+                BottelService.getInstance().getCallInfo(user.getUserID(), PARTNER_ID, topics[selection], new Callback<Integer>() {
+                    @Override
+                    public void success(Integer result, Response response) {
+
+                        reachOutButton.setEnabled(true);
+                        progressBar.setVisibility(View.GONE);
+
+                        if ( result == 0 ) {
                             makeACall();
                         }
+                    }
 
-                        @Override
-                        public void failure(RetrofitError error) {
+                    @Override
+                    public void failure(RetrofitError error) {
+                        reachOutButton.setEnabled(true);
+                        progressBar.setVisibility(View.GONE);
 //                            Toast.makeText(getActivity(), "something went wrong", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    }
+                });
             }
         });
     }
